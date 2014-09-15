@@ -1,0 +1,41 @@
+<? var book = Database.getObjectById(parameter.book) ?>
+
+<? if (book) { ?>
+<table border="0" width="100%">
+<tr><td width="75%" /><td width="25%" /></tr>
+<tr>
+<td>
+<h1><?= book.title ?></h1>
+<? if (book.subtitle) {?> <h2><?=book.subtitle?></h2><?}?>
+<? if (book.authors) { ?><h3>סופר<? if (book.authors.length > 1) {?>ים<?}?>: <?= book.authors.join(", ") ?></h3> <? } ?>
+</td>
+<td/>
+</tr>
+<tr>
+<td align="justify">
+<p><b>תקציר/תאור: </b><?!= book.description ?></p>
+<p><b>קטגוריה: </b><?= book.category ?></p>
+<p><b>עמודים: </b><?= book.pages ?></p>
+<p><b>מסת"ב: </b><?= book.isbn ?><br>(ISBN)</p>
+</td>
+<td align="center" valign="top">
+<? if (book.cover && book.cover.local) { ?>
+<img src="<?= book.cover.local ?>">
+<? } else if (book.cover && book.cover.thumbnail) { ?>
+<img src="<?= book.cover.thumbnail ?>">
+<? } ?>
+<td>
+</tr>
+<tr>
+<td/>
+<td align="left">
+<a href="?book=<?=parameter.book?>&form=1">
+<input type="button" value="לעדכון פרטי ספר"  />
+</a>
+</td>
+</table>
+
+
+
+<? } else { ?><br><br><h2> הספר שחיפשת לא נמצא. </h2><? } ?>
+

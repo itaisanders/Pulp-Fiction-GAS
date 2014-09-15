@@ -1,0 +1,121 @@
+<style>
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}
+
+#bar-hidden{
+visibility:hidden;
+top:0px;
+height:15px;
+}
+
+#bar{
+position:absolute;
+top:0px;
+right:0px;
+width:100%;
+height:15px;
+}
+
+</style>
+
+<font face="david">
+
+<div id="bar-hidden" ></div>
+
+<div dir="rtl" id="bar" >
+<? var bar = HtmlService.createTemplateFromFile("bar") ?>
+<? bar.user = user ?>
+<?!= bar.evaluate().getContent() ?>
+</div>
+
+<div dir="rtl" id="top">
+</div>
+
+<div dir="rtl" id="bottom">
+<p align="center">
+<img src="http://www.netanimations.net/book_pages_turning.gif">
+</p>
+</div>
+
+
+<script>
+
+<? if (parameter.category) { ?>
+google.script.run.withSuccessHandler(updateTop).loadFilters(<?= parameter.category ?>);
+google.script.run.withSuccessHandler(updateBottom).goToCategory(<?= parameter.category ?>);
+<? } else if (parameter.book) { ?>
+<? if (parameter.form) { ?>
+google.script.run.withSuccessHandler(updateTop).loadBookForm(<?= parameter.book ?>);
+<? } else { ?>
+google.script.run.withSuccessHandler(updateTop).loadBookDetails(<?= parameter.book ?>);
+<? } ?>
+google.script.run.withSuccessHandler(updateBottom).loadBookStatus(<?= parameter.book ?>);
+<? } else if (parameter.user == 1) { ?>
+google.script.run.withSuccessHandler(updateTop).loadUser(<?= parameter.user ?>);
+google.script.run.withSuccessHandler(updateBottom).loadBookshelf(<?= parameter.user ?>);
+<? } else if (parameter.query) { ?>
+google.script.run.withSuccessHandler(updateTop).loadQueryInput(<?= parameter.query ?>);
+google.script.run.withSuccessHandler(updateBottom).loadQueryOutput(<?= parameter.query ?>,<?= parameter.startIndex ?>);
+<? } else { ?>
+google.script.run.withSuccessHandler(updateTop).loadFilters();
+google.script.run.withSuccessHandler(updateBottom).goToCategory();
+<? } ?>
+
+
+
+
+
+function register() {
+var name = prompt("הזן שם קורא: ","");
+if (name) {
+google.script.run.withSuccessHandler(updateBar).register(name);
+goToBookshelf(1);
+}
+}
+
+function goToBookshelf(id) {
+if (!id) {
+alert("לא נמצא קורא.");
+}
+google.script.run.withSuccessHandler(updateTop).loadUser(id);
+google.script.run.withSuccessHandler(updateBottom).loadBookshelf(id);
+}
+
+function goToBook(id) {
+if (!id) {
+alert("לא נמצא ספר.");
+}
+google.script.run.withSuccessHandler(updateTop).loadBookDetails(id);
+google.script.run.withSuccessHandler(updateBottom).loadBookStatus(id);
+}
+
+function updateBook(values) {
+google.script.run.withSuccessHandler(updateTop).updateBook(<?= parameter.book ?>,values);
+}
+
+function updateTop(html) {
+document.getElementById("top").innerHTML = html;
+}
+
+function updateBottom(html) {
+document.getElementById("bottom").innerHTML = html;
+}
+
+function updateBar(html) {
+document.getElementById("bar").innerHTML = html;
+}
+
+</script>
+<script>
+var $window, nDashConfig;
+
+$(document).ready(function() {
+  //Saving as vars to minimize operations in onscroll event.
+  $window = $(window);
+  nDashConfig = document.getElementById("bar");
+  //I don't know why, but this only works if event is on document but window's scrollTop is used.
+  $(document).on("scroll",function(e){ nDashConfig.style.top = $window.scrollTop()+"px"; });
+});
+</script>

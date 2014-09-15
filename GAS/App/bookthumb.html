@@ -1,0 +1,30 @@
+<? var books = Database.getBooksInCategory(parameter.category).sort(function (a,b) {return b.date - a.date}) ?>
+<p align="left"><?= books.length ?> ספרים</p>
+<table border="0" width="100%">
+<? var maxBooksInLine = 5 ?>
+
+<tr><? for (var i = 0 ; i < maxBooksInLine ; i++) { ?><td width="<?=100/maxBooksInLine ?>%"></td><? } ?></tr>
+<tr>
+<? var booksInLine = 0 ?>
+<? for (var i = 0 ; i < books.length ; i++) { ?>
+<? if (booksInLine == maxBooksInLine) { ?>
+</tr><tr><?booksInLine = 0 }?>
+<? var book = books[i] ?>
+
+<td align="center" valign="top"><a href="?book=<?= book.getId() ?>">
+<? if (book.cover && book.cover.smallThumbnail) { ?>
+<img src="<?=book.cover.smallThumbnail?>"><br>
+<? } else { ?>
+<img src="http://books.google.co.il/googlebooks/images/no_cover_thumb.gif"><br>
+<? } ?>
+<b><?=book.title?></b><br>
+<? if (book.authors) { ?>
+<? for (var j = 0 ; j < book.authors.length ; j++) { ?>
+<?= book.authors[j] ?> <br> <? } ?>
+<? } ?>
+</a></td>
+<? booksInLine++ ?>
+<? } ?>
+</tr>
+</table>
+

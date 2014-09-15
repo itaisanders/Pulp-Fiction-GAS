@@ -1,0 +1,39 @@
+<? var book = Database.getObjectById(parameter.book) ?>
+
+<? if (book) { ?>
+<form id="input" >
+<table width="100%">
+<tr><td width="80%"/><td width="20%"/></tr>
+<tr>
+<td>
+<h1><?= book.title ?><? if (book.subtitle) {?>: <?=book.subtitle?><?}?></h1>
+<? if (book.authors) { ?><h2>סופר<? if (book.authors.length > 1) {?>ים<?}?>: <?= book.authors.join(", ") ?></h2><? } ?>
+<p><b>תקציר/תאור: </b><br><textarea form="input" name="description" rows="7" cols="50"><?=book.description?></textarea></p>
+<p><b>קטגוריה: </b><input list="categories" name="category" value="<?=book.category?>" /></p>
+<datalist id="categories">
+    <? var categories = Database.getCategories() ?>
+    <? if (categories) { ?>
+    <? for (var i = 0 ; i < categories.length ; i++) { ?>
+    <option value="<?=categories[i]?>" <? if (categories[i]==parameter.category){ ?> selected <? } ?>><?=categories[i]?></option>
+    <? } } ?>
+</datalist>
+<p><b>עמודים: </b><input type="number" name="pages" value="<?=book.pages?>" /></p>
+<p><b>מסת"ב: </b><?= book.isbn ?><br>(ISBN) <input type="button" value='שחזר פרטים ממסת"ב' onClick="google.script.run.withSuccessHandler(updateTop).revertToGoogleData(<?= parameter.book ?>)" /></p>
+</td>
+<td>
+<? if (book.cover && book.cover.thumbnail) { ?>
+<img src="<?= book.cover.thumbnail ?>">
+<? } ?>
+</td>
+</tr>
+</table>
+<p align = "center">
+<input type="button" value="שלח" onClick="google.script.run.withSuccessHandler(updateBook).getValues(this.form)" />
+<a href="?book=<?=parameter.book?>"><input type="button" value="ביטול" /></a>
+</p>
+
+</form>
+
+<? } else { ?><br><br><h2> הספר שחיפשת לא נמצא. </h2><? } ?>
+
+

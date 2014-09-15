@@ -1,0 +1,22 @@
+<? if (parameter.user == 1) { ?>
+<h1>כרטיס הקורא של <?= user.name ?></h1>
+<table width="100%" border="0">
+<tr>
+<td width="80%" /><td width="20%" />
+</tr>
+<tr>
+<td />
+<td align="right">
+<input type="checkbox" onchange="google.script.run.changeSubscription(this.checked)" value="subscribe" <? if (Database.isSubscribed()) { ?> checked <? } ?>>ברצוני לקבל עדכונים אודות ספרים חדשים
+</td>
+<tr>
+<td><br><br><br><br><br><br><br></td>
+<td align="center" valign="bottom">
+<b>להוספת ספר</b><br>
+<form>
+<input type="text" name="query" value="" /><input type="submit" value="חפש" onClick="google.script.run.withSuccessHandler(updateBottom).search(this.form)" />
+</form>
+</td>
+</tr>
+</table>
+<? } ?>

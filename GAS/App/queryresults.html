@@ -1,0 +1,51 @@
+<? if (query) { ?>
+<? var books = QueryGoogleBooks.queryMulti(query, startIndex) ?>
+
+<table border="0" width="100%" cellpadding="10">
+<tr><td width="10%" /><td width="85%" /><td width="50%" /></tr>
+<tr>
+<td align="right"><? if (books.length==10) { ?><input type="button" value="<< הבא" onClick="google.script.run.withSuccessHandler(updateBottom).search(<?=query?>,<?=parseInt(startIndex)+10?>)" /><? } ?></td>
+<td align="center"><input type="button" onClick="google.script.run.withSuccessHandler(updateBottom).loadBookshelf(1)" value="חזרה למדף שלך" /><hr></td>
+<td align="left"><? if (startIndex && startIndex > 0) { ?><input type="button" value="הקודם >>" onClick="google.script.run.withSuccessHandler(updateBottom).search(<?=query?>,<?=startIndex-10?>)" /><? } ?></td>
+</tr>
+<? for (var i = 0 ; i < books.length ; i++) { ?>
+<? var book = books[i] ?>
+<? var local = Database.getBookByGBId(book.gbid) ?>
+<tr>
+<td align="center" valign="center">
+<? if (book.cover && book.cover.smallThumbnail) { ?>
+<img src="<?=book.cover.smallThumbnail?>">
+<? } else { ?>
+<img src="http://books.google.co.il/googlebooks/images/no_cover_thumb.gif">
+<? } ?>
+</td>
+<td align="justify" valign="center">
+<b><?=book.title?></b><br>
+<?if (book.authors) {?><i><?=book.authors.join(", ")?></i><? } ?><br>
+<?if (book.description) {?><?!=book.description?><? } ?>
+</td>
+<td align="center" valign="center">
+
+<? if (local) { ?>
+
+<b><a href="?book=<?=local.getId()?>">
+<? if (local.instances.length == 1) { ?>
+קיים עותק
+<? } else { ?>
+קיימים<br> <?= local.instances.length ?> עותקים
+<? } ?>
+</a></b><br>
+<? } ?>
+<input type="button" value="הוסף עותק" onClick="google.script.run.withSuccessHandler(goToBook).addBook(<?= book.gbid ?>)" />
+</td>
+</tr>
+<? } ?>
+<tr>
+<td align="right"><? if (books.length==10) { ?><input type="button" value="<< הבא" onClick="google.script.run.withSuccessHandler(updateBottom).search(<?=query?>,<?=parseInt(startIndex)+10?>)" /><? } ?></td>
+<td/>
+<td align="left"><? if (startIndex && startIndex > 0) { ?><input type="button" value="הקודם >>" onClick="google.script.run.withSuccessHandler(updateBottom).search(<?=query?>,<?=startIndex-10?>)" /><? } ?></td>
+</tr>
+</table>
+<? } else { ?>
+יש להזין מחרוזת חיפוש.
+<? } ?>

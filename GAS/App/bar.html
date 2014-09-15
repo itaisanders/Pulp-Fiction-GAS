@@ -1,0 +1,23 @@
+<table width="100%" bgcolor="#ffdb99">
+<tr>
+<? if (user) { ?>
+
+<td align="right">
+שלום <b><?= user.name ?></b>!
+</td>
+<td align="center">
+<b><a href="?user=1">כרטיס קורא</a></b>
+</td>
+<td align="center">
+<b><a href="?category=">מדף הספרים</a></b>
+</td>
+
+<? } else { ?>
+<td>
+<input type="button" value="להצטרפות" onClick="register()" />
+</td>
+<? } ?>
+
+</tr>
+</table>
+

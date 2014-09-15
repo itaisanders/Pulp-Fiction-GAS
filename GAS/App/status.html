@@ -1,0 +1,20 @@
+<? if (Database.getObjectById(parameter.book)) { ?>
+<? var instances = Database.getBookInstances(parameter.book) ?>
+
+<b>עותקים: </b>
+<table border="0">
+<? for (var i = 0 ; i < instances.length ; i++) { ?>
+<tr>
+<td>
+<?= Database.getOwnerName(instances[i].owner) ?>
+</td>
+<td>
+<? if (instances[i].owner == Database.getUser().getId()) { ?>
+<input type="button" value="מחק עותק" onClick="google.script.run.withSuccessHandler(updateBottom).deleteInstance(<?= instances[i].getId() ?>)" />
+<? } ?>
+</td>
+</tr>
+<? } ?>
+
+<? }  ?>
+
